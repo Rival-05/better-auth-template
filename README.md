@@ -1,36 +1,91 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🔐 Next.js Auth Starter: BetterAuth + Prisma + Neon + Shadcn/UI
 
-## Getting Started
+A full-featured authentication starter built with:
 
-First, run the development server:
+- ✅ **BetterAuth** (Modern fork of NextAuth)
+- ✅ **Prisma** ORM
+- ✅ **Neon** Postgres (or any PostgreSQL)
+- ✅ **Shadcn/UI** for clean UI components
+- ✅ **Next.js App Router**
+- ✅ **Google OAuth Sign-In** (with easy provider swap)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
+---
+
+## Why BetterAuth ?
+
+BetterAuth is a modern drop-in replacement for NextAuth, optimized for newer versions of Next.js and with improved DX.
+
+## ✨ Features
+
+- Google Sign-In with BetterAuth
+- Prisma DB setup (Neon or custom Postgres)
+- Pre-styled `Sign in with Google` button (Shadcn/UI)
+- Automatic user/session storage
+- Redirect to `/dashboard` after login
+- Easily swappable OAuth providers (GitHub, Discord, etc.)
+
+---
+
+# 🤝 Contribute
+PRs and feedback welcome! If you find this helpful, drop a ⭐️ on the repo!
+
+## 🚀 Getting Started
+
+### 1. Clone this repository
+
+git clone https://github.com/YOUR-USERNAME/your-repo-name.git
+cd your-repo-name
+pnpm install
+
+### 2. Setup .env file
+
+Create a .env file in the root and add the following or (replace with your in already created one):
+
+## Your BetterAuth secret (can be generated using `openssl rand -base64 32`)
+BETTER_AUTH_SECRET=your_better_auth_secret
+BETTER_AUTH_URL=your_better_auth_url
+
+## Google OAuth Credentials (get them from Google Cloud Console)
+GOOGLE_CLIENT_ID=your_google_client_id
+GOOGLE_CLIENT_SECRET=your_google_client_secret
+
+## Prisma DB connection (use Neon or any Postgres URL)
+DATABASE_URL=your_postgres_connection_string
+
+### 3. Push Prisma schema to DB
+
+npx prisma db push
+
+### 4. Run the dev server
+
 pnpm dev
-# or
-bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Visit http://localhost:3000
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 5. 🔐 Sign-In Flow
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Click the "Sign In with Google" button.
 
-## Learn More
+On successful login, user is redirected to /dashboard (if you want to make him redirect to any other page then provide the route in signin.tsx file inplace of dashboard).
 
-To learn more about Next.js, take a look at the following resources:
+User data is stored in the database via Prisma.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 6. 🔄 Want to use GitHub, Discord, etc.?
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Go to your auth config (usually auth.ts) and replace the Google provider with (Github, Twitter or Discord or any other..etc):
 
-## Deploy on Vercel
+For eg:
+(For Github: )
+import { betterAuth } from "better-auth"
+ 
+export const auth = betterAuth({
+    socialProviders: {
+        github: { 
+            clientId: process.env.GITHUB_CLIENT_ID as string, 
+            clientSecret: process.env.GITHUB_CLIENT_SECRET as string, 
+        }, 
+    },
+})
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Similarly for other socialProviders as well. For more refer to https://www.better-auth.com/docs/authentication/email-password
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
